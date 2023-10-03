@@ -1,25 +1,35 @@
 import 'package:sub_space_blog/src/domain/model/base_model.dart';
 
-final class BlogList implements Model {
+/// A model class for representing a list of blog posts.
+final class BlogList extends Model {
+  /// Creates a new `BlogList` instance.
+  ///
+  /// * `blogs`: A list of blog posts.
   const BlogList({
     required this.blogs,
   });
 
+  /// A list of blog posts.
   final List<BlogListItem> blogs;
 
+  /// Creates a `BlogList` instance from a JSON map.
+  ///
+  /// * `json`: A JSON map representing a list of blog posts.
   factory BlogList.fromJson(Map<String, dynamic> json) {
     if (json
         case {
           'blogs': List<dynamic> items,
         }) {
       final blogs = items
-          .map((e) => BlogListItem.fromJson(e as Map<String, dynamic>))
+          .cast<Map<String, dynamic>>()
+          .map(
+            BlogListItem.fromJson,
+          )
           .toList();
 
       return BlogList(blogs: blogs);
     } else {
-      throw const FormatException(
-          'BlogList: could not parse JSON, received an invalid JSON structure');
+      throw const FormatException('BlogList: could not parse JSON, received an invalid JSON structure');
     }
   }
 
@@ -32,7 +42,11 @@ final class BlogList implements Model {
 
   @override
   Map<String, dynamic> toJson() {
-    final items = blogs.map((e) => e.toJson()).toList();
+    final items = blogs
+        .map(
+          (e) => e.toJson(),
+        )
+        .toList();
 
     return {
       'blogs': items,
@@ -45,20 +59,36 @@ final class BlogList implements Model {
       ];
 
   @override
-  bool? get stringify => true;
+  String toString() {
+    return '${blogs.take(5)}...${blogs.length - 5} more...';
+  }
 }
 
-final class BlogListItem implements Model {
+/// A model class for representing a blog post.
+final class BlogListItem extends Model {
+  /// Creates a new `BlogListItem` instance.
+  ///
+  /// * `id`: The ID of the blog post.
+  /// * `title`: The title of the blog post.
+  /// * `imageUrl`: The image URL of the blog post.
   const BlogListItem({
     required this.id,
     required this.title,
     required this.imageUrl,
   });
 
+  /// The ID of the blog post.
   final String id;
+
+  /// The title of the blog post.
   final String title;
+
+  /// The image URL of the blog post.
   final String imageUrl;
 
+  /// Creates a `BlogListItem` instance from a JSON map.
+  ///
+  /// * `json`: A JSON map representing a blog post.
   factory BlogListItem.fromJson(Map<String, dynamic> json) {
     if (json
         case {
@@ -72,8 +102,7 @@ final class BlogListItem implements Model {
         imageUrl: imageUrl,
       );
     } else {
-      throw const FormatException(
-          'BlogListItem: could not parse JSON, received an invalid JSON structure');
+      throw const FormatException('BlogListItem: could not parse JSON, received an invalid JSON structure');
     }
   }
 
@@ -107,5 +136,7 @@ final class BlogListItem implements Model {
       ];
 
   @override
-  bool? get stringify => true;
+  String toString() {
+    return 'id: $id, title: $title, imageUrl: $imageUrl';
+  }
 }
