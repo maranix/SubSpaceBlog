@@ -35,7 +35,11 @@ abstract class BaseApiClient {
   /// Returns a `Future` that resolves to the `http.Response` object.
   Future<http.Response> get(String path) async {
     /// Parses the specified path and base URL into a Uri object.
-    final uri = Uri.parse('$_baseUrl/$path');
+    final uri = Uri.parse(
+      Uri.encodeFull(
+        '$_baseUrl/$path',
+      ),
+    );
 
     /// Makes a GET request to the specified Uri object, with the specified headers.
     return _client.get(uri, headers: _headers);
