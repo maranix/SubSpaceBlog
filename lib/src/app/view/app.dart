@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sub_space_blog/src/data/data.dart';
-import 'package:sub_space_blog/src/domain/bloc/bloc.dart';
+import 'package:sub_space_blog/src/bloc/bloc.dart';
 import 'package:sub_space_blog/src/domain/domain.dart';
 
 class SubSpaceApp extends StatefulWidget {
