@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-abstract class LocalStorage {
+abstract class LocalStorage<T> {
   const LocalStorage();
 
   void open();
