@@ -5,10 +5,7 @@ import 'package:sub_space_blog/src/domain/model/model.dart';
 /// A concrete implementation of the `LocalStorage` class for storing and retrieving blog data.
 final class BlogStorageService implements LocalStorage {
   /// Creates a new `BlogStorageService` instance.
-  BlogStorageService() {
-    /// Opens the local storage database.
-    open();
-  }
+  BlogStorageService();
 
   /// The key for the blog list box in Hive.
   static const _blogListKey = 'blog_list_storage';
@@ -27,16 +24,17 @@ final class BlogStorageService implements LocalStorage {
   LazyBox<Map<String, dynamic>> get _blogBox => Hive.lazyBox(_blogKey);
 
   /// The box for the liked blog.
-  Box<Map<String, dynamic>> get _blogFavouriteBox => Hive.box(_blogKey);
+  Box<Map<String, dynamic>> get _blogFavouriteBox =>
+      Hive.box(_blogFavouriteKey);
 
   /// Opens the local storage database.
   @override
   Future<void> open() async {
     /// Waits for all of the lazy boxes to be opened.
     await Future.wait([
-      Hive.openLazyBox(_blogListKey),
-      Hive.openLazyBox(_blogKey),
-      Hive.openBox(_blogFavouriteKey),
+      Hive.openBox<Map<String, dynamic>>(_blogFavouriteKey),
+      Hive.openLazyBox<Iterable<Map<String, dynamic>>>(_blogListKey),
+      Hive.openLazyBox<Map<String, dynamic>>(_blogKey),
     ]);
   }
 

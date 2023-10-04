@@ -36,9 +36,7 @@ final class BlogBloc extends Bloc<BlogEvent, BlogState> {
     BlogInitial event,
     Emitter<BlogState> emit,
   ) async {
-    /// Retrieves the blog list from local storage.
-    final favourites = _storage.retrieveLikedBlogs();
-    final blogs = await _storage.retrieveBlogList();
+    final (blogs, favourites) = await _restoreState();
 
     /// Emits a new state with the retrieved blog list and favourites.
     emit(state.copyWith(blogs: blogs, favourites: favourites));
@@ -84,6 +82,16 @@ final class BlogBloc extends Bloc<BlogEvent, BlogState> {
   ) async {
     /// Dislikes the given blog locally.
     await _storage.removeLikedBlog(event.id);
+  }
+
+  Future<(BlogList, Iterable<BlogListItem>)> _restoreState() async {
+    await _storage.open();
+
+    /// Retrieves the blog list from local storage.
+    final favourites = _storage.retrieveLikedBlogs();
+    final blogs = await _storage.retrieveBlogList();
+
+    return (blogs, favourites);
   }
 
   /// Closes the bloc and stores the blog list to local storage.

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sub_space_blog/src/app/routes/routes.dart';
 import 'package:sub_space_blog/src/data/data.dart';
 import 'package:sub_space_blog/src/bloc/bloc.dart';
 import 'package:sub_space_blog/src/domain/domain.dart';
@@ -20,6 +22,8 @@ class _SubSpaceAppState extends State<SubSpaceApp> {
 
     _blogRepository = SubSpaceBlogRepository();
     _storageService = BlogStorageService();
+
+    _storageService.open();
   }
 
   @override
@@ -53,6 +57,10 @@ class _AppConfiguration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp();
+    return MaterialApp.router(
+      routerConfig: GoRouter(
+        routes: routes,
+      ),
+    );
   }
 }
