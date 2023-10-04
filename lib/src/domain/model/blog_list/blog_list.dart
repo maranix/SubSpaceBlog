@@ -18,7 +18,7 @@ final class BlogList extends Model {
   factory BlogList.fromJson(Map<String, dynamic> json) {
     if (json
         case {
-          'blogs': List<dynamic> items,
+          'blogs': Iterable<dynamic> items,
         }) {
       final blogs = items
           .cast<Map<String, dynamic>>()
@@ -52,6 +52,12 @@ final class BlogList extends Model {
       'blogs': items,
     };
   }
+
+  /// An empty instance of the model
+  static const empty = BlogList(blogs: []);
+
+  /// A convenient getter to check if blogs property is empty
+  bool get isEmpty => blogs.isEmpty;
 
   @override
   List<Object?> get props => [
