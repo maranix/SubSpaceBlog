@@ -27,7 +27,9 @@ final routes = [
     name: Routes.root.name,
     path: '/',
     redirect: (context, _) {
-      context.read<BlogBloc>().add(const BlogInitial());
+      context.read<BlogBloc>()
+        ..add(const BlogInitial())
+        ..add(const BlogFetched());
 
       return Routes.blogs.name;
     },

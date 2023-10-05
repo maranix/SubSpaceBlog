@@ -22,11 +22,11 @@ final class BlogFetched extends BlogEvent {
 }
 
 /// Event fired when a blog is liked.
-final class BlogLiked extends BlogEvent {
-  /// Creates a new `BlogLiked` event instance.
+final class BlogFavourited extends BlogEvent {
+  /// Creates a new `BlogFavourited` event instance.
   ///
   /// * `blog`: The blog that was liked.
-  const BlogLiked({
+  const BlogFavourited({
     required this.blog,
   });
 
@@ -35,20 +35,4 @@ final class BlogLiked extends BlogEvent {
 
   @override
   List<Object?> get props => [blog];
-}
-
-/// Event fired when a blog is disliked.
-final class BlogDisliked extends BlogEvent {
-  /// Creates a new `BlogDisliked` event instance.
-  ///
-  /// * `id`: The ID of the blog that was disliked.
-  const BlogDisliked({
-    required this.id,
-  });
-
-  /// The ID of the blog that was disliked.
-  final String id;
-
-  @override
-  List<Object?> get props => [id];
 }

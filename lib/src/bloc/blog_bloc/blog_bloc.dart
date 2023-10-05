@@ -25,10 +25,7 @@ final class BlogBloc extends Bloc<BlogEvent, BlogState> {
     on<BlogFetched>(_onFetched);
 
     /// Listens for the `BlogLiked` event and likes the given blog locally.
-    on<BlogLiked>(_onLiked);
-
-    /// Listens for the `BlogDisliked` event and dislikes the given blog locally.
-    on<BlogDisliked>(_onDisliked);
+    on<BlogFavourited>(_onFavourite);
   }
 
   /// Handles the `BlogInitial` event.
@@ -67,21 +64,20 @@ final class BlogBloc extends Bloc<BlogEvent, BlogState> {
   }
 
   /// Handles the `BlogLiked` event.
-  Future<void> _onLiked(
-    BlogLiked event,
+  Future<void> _onFavourite(
+    BlogFavourited event,
     Emitter<BlogState> emit,
   ) async {
-    /// Likes the given blog locally.
-    await _storage.storeLikedBlog(event.blog);
-  }
+    if (state.favourites.contains(event.blog)) {
+      /// Unlikes and removes the given blog locally.
+      await _storage.removeLikedBlog(event.blog.id);
 
-  /// Handles the `BlogDisliked` event.
-  Future<void> _onDisliked(
-    BlogDisliked event,
-    Emitter<BlogState> emit,
-  ) async {
-    /// Dislikes the given blog locally.
-    await _storage.removeLikedBlog(event.id);
+      emit(state.copyWith(favourites: [...state.favourites.takeWhile((value) => value != event.blog)]));
+    } else {
+      /// Likes and stores the given blog locally.
+      emit(state.copyWith(favourites: [...state.favourites, event.blog]));
+      await _storage.storeLikedBlog(event.blog);
+    }
   }
 
   Future<(BlogList, Iterable<BlogListItem>)> _restoreState() async {

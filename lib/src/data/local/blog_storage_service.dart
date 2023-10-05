@@ -17,15 +17,13 @@ final class BlogStorageService implements LocalStorage {
   static const _blogFavouriteKey = 'blog_favourite_storage';
 
   /// The lazy box for the blog list.
-  LazyBox<Iterable<Map<String, dynamic>>> get _blogListBox =>
-      Hive.lazyBox(_blogListKey);
+  Box<Iterable<Map<String, dynamic>>> get _blogListBox => Hive.box(_blogListKey);
 
   /// The lazy box for the blog.
-  LazyBox<Map<String, dynamic>> get _blogBox => Hive.lazyBox(_blogKey);
+  Box<Map<String, dynamic>> get _blogBox => Hive.box(_blogKey);
 
   /// The box for the liked blog.
-  Box<Map<String, dynamic>> get _blogFavouriteBox =>
-      Hive.box(_blogFavouriteKey);
+  Box<Map<String, dynamic>> get _blogFavouriteBox => Hive.box(_blogFavouriteKey);
 
   /// Opens the local storage database.
   @override
@@ -33,8 +31,8 @@ final class BlogStorageService implements LocalStorage {
     /// Waits for all of the lazy boxes to be opened.
     await Future.wait([
       Hive.openBox<Map<String, dynamic>>(_blogFavouriteKey),
-      Hive.openLazyBox<Iterable<Map<String, dynamic>>>(_blogListKey),
-      Hive.openLazyBox<Map<String, dynamic>>(_blogKey),
+      Hive.openBox<Iterable<Map<String, dynamic>>>(_blogListKey),
+      Hive.openBox<Map<String, dynamic>>(_blogKey),
     ]);
   }
 

@@ -63,11 +63,6 @@ final class BlogList extends Model {
   List<Object?> get props => [
         blogs,
       ];
-
-  @override
-  String toString() {
-    return '${blogs.take(5)}...${blogs.length - 5} more...';
-  }
 }
 
 /// A model class for representing a blog post.

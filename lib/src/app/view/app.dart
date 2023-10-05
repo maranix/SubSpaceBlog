@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sub_space_blog/src/app/routes/routes.dart';
-import 'package:sub_space_blog/src/data/data.dart';
+import 'package:sub_space_blog/src/app/theme/theme.dart';
 import 'package:sub_space_blog/src/bloc/bloc.dart';
+import 'package:sub_space_blog/src/data/data.dart';
 import 'package:sub_space_blog/src/domain/domain.dart';
 
 class SubSpaceApp extends StatefulWidget {
@@ -61,6 +62,7 @@ class _AppConfiguration extends StatelessWidget {
       routerConfig: GoRouter(
         routes: routes,
       ),
+      theme: appTheme(context),
     );
   }
 }

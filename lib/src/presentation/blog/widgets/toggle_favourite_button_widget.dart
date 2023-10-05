@@ -13,7 +13,7 @@ class ToggleFavouriteButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton.filled(
-      icon: const Icon(Icons.favorite_rounded),
+      icon: isLiked ? const Icon(Icons.favorite_rounded) : const Icon(Icons.favorite_outline_rounded),
       color: isLiked ? Colors.red : null,
       onPressed: onPressed,
     );
