@@ -36,7 +36,8 @@ final class BlogBloc extends Bloc<BlogEvent, BlogState> {
     final (blogs, favourites) = await _restoreState();
 
     /// Emits a new state with the retrieved blog list and favourites.
-    emit(state.copyWith(blogs: blogs, favourites: favourites));
+    emit(state.copyWith(
+        status: BlogStatus.fetched, blogs: blogs, favourites: favourites));
   }
 
   /// Handles the `BlogFetched` event.
@@ -44,6 +45,11 @@ final class BlogBloc extends Bloc<BlogEvent, BlogState> {
     BlogFetched event,
     Emitter<BlogState> emit,
   ) async {
+    // Wait for 2 seconds to ensure the initialization is done properly
+    if (state.status == BlogStatus.initial) {
+      await Future.delayed(const Duration(seconds: 2));
+    }
+
     /// If the blog list is empty, then emit a new state with the `fetching` status.
     if (state.blogs.isEmpty) {
       emit(state.copyWith(status: BlogStatus.fetching));
@@ -72,7 +78,9 @@ final class BlogBloc extends Bloc<BlogEvent, BlogState> {
       /// Unlikes and removes the given blog locally.
       await _storage.removeLikedBlog(event.blog.id);
 
-      emit(state.copyWith(favourites: [...state.favourites.takeWhile((value) => value != event.blog)]));
+      emit(state.copyWith(favourites: [
+        ...state.favourites.takeWhile((value) => value != event.blog)
+      ]));
     } else {
       /// Likes and stores the given blog locally.
       emit(state.copyWith(favourites: [...state.favourites, event.blog]));

@@ -24,7 +24,9 @@ class BlogPage extends StatelessWidget {
           case BlogStatus.updating:
             Fluttertoast.showToast(msg: 'Refreshing your feed');
           case BlogStatus.failure:
-            Fluttertoast.showToast(msg: 'An error occurred while getting your feed, Please try again later');
+            Fluttertoast.showToast(
+                msg:
+                    'An error occurred while getting your feed, Please try again later');
           default:
             null;
         }
@@ -57,9 +59,11 @@ class BlogPage extends StatelessWidget {
                   maxCrossAxisExtent: 400,
                   mainAxisExtent: 300,
                 ),
-                initialItemCount: state.blogs.isEmpty ? 100 : state.blogs.blogs.length,
+                initialItemCount:
+                    state.blogs.isEmpty ? 100 : state.blogs.blogs.length,
                 itemBuilder: (context, index, animation) {
-                  if (state.status == BlogStatus.fetching) {
+                  if (state.status == BlogStatus.fetching ||
+                      state.status == BlogStatus.initial) {
                     return Shimmer.fromColors(
                       key: Key('blog_feed_$index'),
                       baseColor: Colors.grey.shade800,

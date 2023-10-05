@@ -17,31 +17,29 @@ final class BlogStorageService implements LocalStorage {
   static const _blogFavouriteKey = 'blog_favourite_storage';
 
   /// The lazy box for the blog list.
-  Box<Iterable<Map<String, dynamic>>> get _blogListBox => Hive.box(_blogListKey);
+  Box get _blogListBox => Hive.box(_blogListKey);
 
   /// The lazy box for the blog.
-  Box<Map<String, dynamic>> get _blogBox => Hive.box(_blogKey);
+  Box get _blogBox => Hive.box(_blogKey);
 
   /// The box for the liked blog.
-  Box<Map<String, dynamic>> get _blogFavouriteBox => Hive.box(_blogFavouriteKey);
+  Box get _blogFavouriteBox => Hive.box(_blogFavouriteKey);
 
   /// Opens the local storage database.
   @override
   Future<void> open() async {
     /// Waits for all of the lazy boxes to be opened.
     await Future.wait([
-      Hive.openBox<Map<String, dynamic>>(_blogFavouriteKey),
-      Hive.openBox<Iterable<Map<String, dynamic>>>(_blogListKey),
-      Hive.openBox<Map<String, dynamic>>(_blogKey),
+      Hive.openBox(_blogFavouriteKey),
+      Hive.openBox(_blogListKey),
+      Hive.openBox(_blogKey),
     ]);
   }
 
   /// Stores the blog list in local storage.
   Future<void> storeBlogList(BlogList list) async {
     /// Converts the blog list to a list of JSON maps.
-    final blogs = list.blogs.map(
-      (b) => b.toJson(),
-    );
+    final blogs = list.blogs.map((b) => b.toJson()).toList();
 
     /// Stores the list of JSON maps in the blog list box.
     return _blogListBox.put('blogs', blogs);
@@ -50,12 +48,12 @@ final class BlogStorageService implements LocalStorage {
   /// Retrieves the blog list from local storage.
   Future<BlogList> retrieveBlogList() async {
     /// Retrieves the list of JSON maps from the blog list box.
-    final blogs = await _blogListBox.get('blogs');
+    final blogs = await _blogListBox.get('blogs') as List<dynamic>;
 
     /// If the list of JSON maps is not null, then converts it to a `BlogList` object.
     if (blogs != null) {
       return BlogList.fromJson({
-        'blogs': blogs,
+        'blogs': blogs.map((e) => Map<String, dynamic>.from(e)).toList(),
       });
     }
 
@@ -72,7 +70,7 @@ final class BlogStorageService implements LocalStorage {
   /// Retrieves the blog from local storage.
   Future<Map<String, dynamic>?> retrieveBlog(String id) async {
     /// Retrieves the blog as a JSON map from the blog box.
-    return await _blogBox.get(id);
+    return Map.from(await _blogBox.get(id));
   }
 
   /// Stores the liked blog in local storage.
@@ -90,6 +88,7 @@ final class BlogStorageService implements LocalStorage {
   /// Retrieves the liked blogs from local storage.
   Iterable<BlogListItem> retrieveLikedBlogs() {
     /// Maps the JSON maps in the liked blog box to `BlogListItem` objects.
-    return _blogFavouriteBox.values.map(BlogListItem.fromJson);
+    return _blogFavouriteBox.values
+        .map((e) => BlogListItem.fromJson(Map.from(e)));
   }
 }
