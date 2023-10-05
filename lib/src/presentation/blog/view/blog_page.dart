@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:sub_space_blog/src/app/routes/routes.dart';
 import 'package:sub_space_blog/src/bloc/bloc.dart';
 import 'package:sub_space_blog/src/domain/domain.dart';
 import 'package:sub_space_blog/src/presentation/blog/widgets/toggle_favourite_button_widget.dart';
@@ -49,8 +51,11 @@ class BlogPage extends StatelessWidget {
               ),
               title: const Text('Blogs'),
               centerTitle: true,
-              actions: const [
-                IconWidget(icon: Icons.bookmarks_rounded),
+              actions: [
+                IconWidget(
+                  icon: Icons.bookmarks_rounded,
+                  onPressed: () => context.go(Routes.favouriteBlogs.name),
+                ),
               ],
             ),
             BlocBuilder<BlogBloc, BlogState>(
@@ -76,10 +81,21 @@ class BlogPage extends StatelessWidget {
                   } else {
                     final blog = state.blogs.blogs.elementAt(index);
 
-                    return _BlogListItemWidget(
-                      key: Key('blog_feed_${blog.id}'),
-                      item: blog,
-                      isLiked: state.favourites.contains(blog),
+                    return GestureDetector(
+                      onTap: () => context.go(
+                        context.namedLocation(
+                          Routes.blog.name,
+                          pathParameters: {
+                            'id': blog.id,
+                          },
+                        ),
+                        extra: blog,
+                      ),
+                      child: _BlogListItemWidget(
+                        key: Key('blog_feed_${blog.id}'),
+                        item: blog,
+                        isLiked: state.favourites.contains(blog),
+                      ),
                     );
                   }
                 },

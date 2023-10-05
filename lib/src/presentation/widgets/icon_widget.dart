@@ -11,7 +11,8 @@ class IconWidget extends StatelessWidget {
   final IconData? icon;
   final VoidCallback? onPressed;
 
-  factory IconWidget.svgAsset({Key? key, required String assetName}) => _SvgIconWidget(
+  factory IconWidget.svgAsset({Key? key, required String assetName}) =>
+      _SvgIconWidget(
         key: key,
         asset: assetName,
       );
@@ -22,7 +23,7 @@ class IconWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: IconButton(
         splashRadius: 24.0,
-        onPressed: () {},
+        onPressed: onPressed,
         icon: Icon(
           icon,
         ),
