@@ -1,4 +1,4 @@
-**# SubSpaceBlog**
+# **SubSpaceBlog**
 
 ## Prerequisites
 
